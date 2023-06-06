@@ -24,12 +24,12 @@ int check_cycle(listint_t *list)
 		if (f && f == s)
 		{
 			if (firstMatch)
-				return (0);
+				return (1);
 			s = list;
 			firstMatch = 1;
 		}
 
 	}
-	return (1);
+	return (0);
 }
 
