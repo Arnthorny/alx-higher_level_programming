@@ -8,25 +8,14 @@
 int check_cycle(listint_t *list)
 {
 	const listint_t *s = list, *f = list;
-	short int firstMatch = 0;
-
-	if (!list)
-		exit(98);
 
 	while (s)
 	{
 		s = s->next;
-		if (!firstMatch)
-			f = f ? (f->next ? f->next->next : NULL) : NULL;
-		else
-			f = f ? f->next : NULL;
-
-		if (f && f == s)
-		{
-			s = list;
-			firstMatch = 1;
+		f = f ? (f->next ? f->next->next : NULL) : NULL;
+		
+		if (f && s && f == s)
 			return (1);
-		}
 
 	}
 	return (0);
