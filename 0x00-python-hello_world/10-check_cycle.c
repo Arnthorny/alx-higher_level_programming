@@ -13,7 +13,7 @@ int check_cycle(listint_t *list)
 	{
 		s = s->next;
 		f = f ? (f->next ? f->next->next : NULL) : NULL;
-		
+
 		if (f && s && f == s)
 			return (1);
 
