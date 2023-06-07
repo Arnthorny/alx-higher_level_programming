@@ -53,7 +53,7 @@ listint_t *insert_node(listint_t **head, int number)
 	new->n = number;
 	new->next = NULL;
 
-	while (curr)
+	while (curr || i == 0)
 	{
 		if (i == loca && curr == *head)
 		{
