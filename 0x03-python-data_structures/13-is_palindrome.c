@@ -9,8 +9,8 @@
 int list_len(listint_t *h)
 {
 	int len = 0;
-	
-	while(h)
+
+	while (h)
 	{
 		len++;
 		h = h->next;
@@ -49,24 +49,27 @@ int *node_data_arr(listint_t *head, int len)
  */
 int is_palindrome(listint_t **head)
 {
-	int len_list, i = 0, *arr_of_d;
+	int len_list, i = 0, *arr_of_d = NULL;
+	listint_t *head_dup;
 
 	if (!head)
 		exit(98);
 
-	len_list = list_len(*head);
+	head_dup = *head;
+	len_list = list_len(head_dup);
 	if (len_list == 0)
 		return (1);
 
-	arr_of_d = node_data_arr(*head, len_list);
+	arr_of_d = node_data_arr(head_dup, len_list);
 	if (!arr_of_d)
 		exit(98);
-	
+
 	for (i = 0; i < (len_list / 2); i++)
 	{
-		if (!((*head)->n == arr_of_d[len_list - 1 - i]))
+		if (!(head_dup->n == arr_of_d[len_list - 1 - i]))
 			return (0);
-		*head = (*head)->next;
+		head_dup = head_dup->next;
 	}
+	free(arr_of_d);
 	return (1);
 }
