@@ -13,7 +13,6 @@ int list_len(listint_t *h)
 	return (1 + ((h->next) ? list_len(h->next) : 0));
 }
 
-
 /**
  * node_data_arr - Function to create array of a linked list data
  * @head: Pointer to head of linked list
@@ -37,29 +36,6 @@ int *node_data_arr(listint_t *head, int len)
 	return (arr_of_data);
 }
 
-
-/**
-  * rev_arr - Revereses a given array of integers
-  * @arr: Given array.
-  * @size: Size of the array
-  * Return: Pointer to reversed array.
-  */
-
-int *rev_arr(int *arr, int size)
-{
-	int *arrEnd = arr + size - 1, tmp;
-
-	while (arr <= arrEnd)
-	{
-		tmp = *arr;
-		*arr = *arrEnd;
-		*arrEnd = tmp;
-		arr++;
-		arrEnd--;
-	}
-	return (arr);
-}
-
 /**
  * is_palindrome - Function to check if linked list is a palindrome
  * @head: Pointer that points to linked list head
@@ -79,11 +55,10 @@ int is_palindrome(listint_t **head)
 	arr_of_d = node_data_arr(*head, len_list);
 	if (!arr_of_d)
 		exit(98);
-	rev_arr(arr_of_d, len_list);
-
+	
 	for (i = 0; i < (len_list / 2); i++)
 	{
-		if (!((*head)->n == arr_of_d[i]))
+		if (!((*head)->n == arr_of_d[len_list - 1 - i]))
 			return (0);
 		*head = (*head)->next;
 	}
