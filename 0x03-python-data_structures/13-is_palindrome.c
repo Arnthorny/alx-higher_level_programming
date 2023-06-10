@@ -13,28 +13,51 @@ int list_len(listint_t *h)
 	return (1 + ((h->next) ? list_len(h->next) : 0));
 }
 
+
 /**
- * has_corres - Check if node data is palindromic
- * @node: Node to be checked
- * @idx: Index of node in list
- * @len: List Length
- * @head: Pointer to list
- * Return: 1 if palindromic else 0
+ * node_data_arr - Function to create array of a linked list data
+ * @head: Pointer to head of linked list
+ * @len: Size of Array.
+ * Return: Pointer to created array
  */
 
-int has_corres(listint_t *node, int idx, int len, listint_t *head)
+int *node_data_arr(listint_t *head, int len)
 {
-	int i = 0;
-	int corr_i = (len - idx - 1);
+	int *arr_of_data = NULL, i = 0;
+
+	arr_of_data = malloc(sizeof(int) * len);
+	if (!arr_of_data)
+		return (NULL);
 
 	while (head)
 	{
-		if (i == corr_i)
-			return (node->n == head->n);
-		i++;
+		arr_of_data[i++] = head->n;
 		head = head->next;
 	}
-	return (0);
+	return (arr_of_data);
+}
+
+
+/**
+  * rev_arr - Revereses a given array of integers
+  * @arr: Given array.
+  * @size: Size of the array
+  * Return: Pointer to reversed array.
+  */
+
+int *rev_arr(int *arr, int size)
+{
+	int *arrEnd = arr + size - 1, tmp;
+
+	while (arr <= arrEnd)
+	{
+		tmp = *arr;
+		*arr = *arrEnd;
+		*arrEnd = tmp;
+		arr++;
+		arrEnd--;
+	}
+	return (arr);
 }
 
 /**
@@ -42,11 +65,9 @@ int has_corres(listint_t *node, int idx, int len, listint_t *head)
  * @head: Pointer that points to linked list head
  * Return: 0 if not palindrome else 1
  */
-
 int is_palindrome(listint_t **head)
 {
-	int len_list, i = 0, range;
-	listint_t *head_dup;
+	int len_list, i = 0, *arr_of_d;
 
 	if (!head)
 		exit(98);
@@ -55,14 +76,16 @@ int is_palindrome(listint_t **head)
 	if (len_list == 0)
 		return (1);
 
-	head_dup = *head;
-	range = len_list / 2;
-	for (i = 0; i < range; i++)
-	{
-		if (!has_corres(head_dup, i, len_list, *head))
-			return (0);
-		head_dup = head_dup->next;
-	}
+	arr_of_d = node_data_arr(*head, len_list);
+	if (!arr_of_d)
+		exit(98);
+	rev_arr(arr_of_d, len_list);
 
+	for (i = 0; i < (len_list / 2); i++)
+	{
+		if (!((*head)->n == arr_of_d[i]))
+			return (0);
+		*head = (*head)->next;
+	}
 	return (1);
 }
