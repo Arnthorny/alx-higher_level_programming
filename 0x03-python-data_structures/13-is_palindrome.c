@@ -8,9 +8,15 @@
 
 int list_len(listint_t *h)
 {
-	if (!h)
-		return (0);
-	return (1 + ((h->next) ? list_len(h->next) : 0));
+	int len = 0;
+	
+	while(h)
+	{
+		len++;
+		h = h->next;
+	}
+
+	return (len);
 }
 
 /**
