@@ -48,7 +48,7 @@ void print_python_bytes(PyObject *p)
 	printf("  size: %ld\n", len);
 	printf("  trying string: %s\n", byte_str);
 
-	len_to_pr = len <= 10 ? len + 1 : 10;
+	len_to_pr = len < 10 ? len + 1 : 10;
 	printf("  first %ld bytes: ", len_to_pr);
 
 	for (i = 0; i < len_to_pr - 1; i++)
