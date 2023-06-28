@@ -5,6 +5,8 @@ This module defines MagicClass that behaves
 the same way as a given bytecode
 """
 
+import math
+
 
 class MagicClass:
     """
