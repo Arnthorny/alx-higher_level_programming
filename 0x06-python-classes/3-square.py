@@ -32,6 +32,6 @@ class Square:
         """
         Computes area of given square
         Returns:
-            The area computed
+            int: The area computed
         """
-        return(self.__size * self.__size)
+        return self.__size * self.__size

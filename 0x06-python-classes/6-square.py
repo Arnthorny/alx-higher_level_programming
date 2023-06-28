@@ -30,12 +30,12 @@ class Square:
         Returns:
             The area computed
         """
-        return(self.__size * self.__size)
+        return self.__size * self.__size
 
     @property
     def size(self):
         """int: Getter to get the value of size"""
-        return(self.__size)
+        return self.__size
 
     @size.setter
     def size(self, value):
@@ -67,7 +67,7 @@ class Square:
         The setter raises a TypeError if value passed is not
         a tuple containing exactly 2 positive numbers
         """
-        return(self.__position)
+        return self.__position
 
     @position.setter
     def position(self, value):
