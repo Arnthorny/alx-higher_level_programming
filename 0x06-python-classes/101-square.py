@@ -80,3 +80,21 @@ class Square:
                 raise Exception
         except Exception:
             raise TypeError("position must be a tuple of 2 positive integers")
+
+    def __str__(self):
+        """
+            This function returns a string of entire square.
+            Returns:
+                String to be printed
+        """
+        tmp_str = ""
+        if self.__size == 0:
+            tmp_str += "\n"
+        else:
+            tmp_str += "{}".format("\n" * self.__position[1])
+            for i in range(self.__size):
+                tmp_str += "{}".format(" " * self.__position[0])
+                tmp_str += "{}".format("#" * self.__size)
+                if i < (self.__size - 1):
+                    tmp_str += "\n"
+        return(tmp_str)
