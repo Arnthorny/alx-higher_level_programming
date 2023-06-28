@@ -97,4 +97,4 @@ class Square:
                 tmp_str += "{}".format("#" * self.__size)
                 if i < (self.__size - 1):
                     tmp_str += "\n"
-        return(tmp_str)
+        return tmp_str

@@ -47,28 +47,40 @@ class Square:
         """Method to define equality operator"""
         if self.area() == oth.area():
             return (True)
+        else:
+            return (False)
 
     def __ne__(self, oth):
         """Method to define the != operator"""
         if self.area() != oth.area():
             return (True)
+        else:
+            return (False)
 
     def __gt__(self, oth):
         """Method to define the > operator"""
         if self.area() > oth.area():
             return (True)
+        else:
+            return (False)
 
     def __ge__(self, oth):
         """Method to define the >= operator"""
         if self.area() >= oth.area():
             return (True)
+        else:
+            return (False)
 
     def __lt__(self, oth):
         """Method to define the < operator"""
         if self.area() < oth.area():
             return (True)
+        else:
+            return (False)
 
     def __le__(self, oth):
         """Method to define the <= operator"""
         if self.area() <= oth.area():
             return (True)
+        else:
+            return (False)
