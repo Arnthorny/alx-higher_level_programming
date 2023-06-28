@@ -72,7 +72,7 @@ class Square:
     @position.setter
     def position(self, value):
         try:
-            if(type(value) == tuple and value[0] >= 0
+            if (type(value) == tuple and value[0] >= 0
                     and value[1] >= 0 and type(value[0]) == int
                     and type(value[1]) == int):
                 self.__position = value

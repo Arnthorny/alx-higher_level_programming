@@ -72,7 +72,7 @@ class Square:
     @position.setter
     def position(self, value):
         try:
-            if(type(value) == tuple and value[0] >= 0
+            if (type(value) == tuple and value[0] >= 0
                     and value[1] >= 0 and type(value[0]) == int
                     and type(value[1]) == int):
                 self.__position = value
@@ -89,7 +89,7 @@ class Square:
         """
         tmp_str = ""
         if self.__size == 0:
-            tmp_str += "\n"
+            pass
         else:
             tmp_str += "{}".format("\n" * self.__position[1])
             for i in range(self.__size):
@@ -97,4 +97,4 @@ class Square:
                 tmp_str += "{}".format("#" * self.__size)
                 if i < (self.__size - 1):
                     tmp_str += "\n"
-        return(tmp_str)
+        return tmp_str
