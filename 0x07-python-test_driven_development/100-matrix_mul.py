@@ -18,7 +18,7 @@ and returns the resulting value.
 """
 
 
-def matrix_mul(m_a, m_b):
+def matrix_mul(m_a=None, m_b=None):
     """
     This function returns the product of matrix m_a and m_b.
 

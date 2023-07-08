@@ -14,6 +14,15 @@ Test that function has a docstring:
     >>> len(matrix_mul.__doc__) > 1
     True
 
+Multiply matrix m_a of invalid type:
+	>>> m_a = "boyy"
+	>>> m_b = [[1,2,3], [2,4,5], [8,9,11]]
+	>>> matrix_mul(m_a, m_b)
+	Traceback (most recent call last):
+		...
+	TypeError: m_a must be a list
+
+
 Multiply matrix m_b of invalid type:
 	>>> m_b = 123
 	>>> m_a = [[1,2,3], [2,4,5], [8,9,11]]
@@ -59,6 +68,14 @@ Multiply matrix m_a which is an empty list:
 		...
 	ValueError: m_a can't be empty
 	
+Multiply matrix m_b which is not a list of ints/floats:
+	>>> m_b = [[1, "bro", 3], ["12", 4, 5], [6, 7.95, 8]]
+	>>> m_a = [[1, 2, 9], [2, 4, 6]]
+	>>> matrix_mul(m_a, m_b)
+	Traceback (most recent call last):
+		...
+	TypeError: m_b should contain only integers or floats
+
 Multiply matrix m_a which is not a list of ints/floats:
 	>>> m_a = [[1, 2.5, 3], ["12", 4, 5], [6, 7.95, 8]]
 	>>> m_b = [[1, 2, 9], [2, 4, 6]]
@@ -112,4 +129,20 @@ Multiply matrix m_b and m_a if multiplication is valid:
 	[[7, 10],
 	[15.5, 23.0],
 	[18, 26]]
+
+Call matrix_mul with no argument:
+	>>> m_a = [[1, 2], [3.5, 4], [3, 5]]
+	>>> m_b = [[1, 2], [3, 4]]
+	>>> matrix_mul()	#doctest: +NORMALIZE_WHITESPACE
+	Traceback (most recent call last):
+		...
+	TypeError: m_a must be a list
+
+Call matrix_mul with one argument:
+	>>> m_a = [[1, 2], [3.5, 4], [3, 5]]
+	>>> m_b = [[1, 2], [3, 4]]
+	>>> matrix_mul(m_a)	#doctest: +NORMALIZE_WHITESPACE
+	Traceback (most recent call last):
+		...
+	TypeError: m_b must be a list
 

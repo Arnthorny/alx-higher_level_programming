@@ -97,3 +97,9 @@ Test Non-string argument:
 	Traceback (most recent call last):
 		...
 	TypeError: text must be a string
+
+Test Empty argument:
+	>>> text_indentation()
+	Traceback (most recent call last):
+		...
+	TypeError: text must be a string

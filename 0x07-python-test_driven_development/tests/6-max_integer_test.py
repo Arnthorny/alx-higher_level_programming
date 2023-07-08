@@ -14,6 +14,7 @@ class TestMaxInteger(unittest.TestCase):
 
     def test_equality(self):
         #Make sure type errors are raised when necessary
+        self.assertEqual(max_integer([110,20,-34,55]), 110)
         self.assertEqual(max_integer([1,20,-34,55]), 55)
         self.assertEqual(max_integer([1]), 1)
         self.assertEqual(max_integer([-5, -9, -2, -98]), -2)
