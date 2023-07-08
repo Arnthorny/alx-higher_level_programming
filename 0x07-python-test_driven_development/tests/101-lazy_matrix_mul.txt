@@ -14,13 +14,37 @@ Test that function has a docstring:
     >>> len(lazy_matrix_mul.__doc__) > 1
     True
 
+Call matrix_mul with no argument:
+	>>> m_a = [[1, 2], [3.5, 4], [3, 5]]
+	>>> m_b = [[1, 2], [3, 4]]
+	>>> lazy_matrix_mul()	#doctest: +NORMALIZE_WHITESPACE
+	Traceback (most recent call last):
+		...
+	TypeError: Object arrays are not currently supported
+
+Call matrix_mul with one argument:
+	>>> m_a = [[1, 2], [3.5, 4], [3, 5]]
+	>>> m_b = [[1, 2], [3, 4]]
+	>>> lazy_matrix_mul(m_a)	#doctest: +NORMALIZE_WHITESPACE
+	Traceback (most recent call last):
+		...
+	TypeError: Object arrays are not currently supported
+
+Multiply matrix m_a of invalid type:
+	>>> m_a = "boyy"
+	>>> m_b = [[1,2,3], [2,4,5], [8,9,11]]
+	>>> lazy_matrix_mul(m_a, m_b)
+	Traceback (most recent call last):
+		...
+	ValueError: Scalar operands are not allowed, use '*' instead
+
 Multiply matrix m_b of invalid type:
 	>>> m_b = 123
 	>>> m_a = [[1,2,3], [2,4,5], [8,9,11]]
 	>>> lazy_matrix_mul(m_a, m_b)
 	Traceback (most recent call last):
 		...
-	TypeError: m_b must be a list
+	ValueError: Scalar operands are not allowed, use '*' instead
 
 	>>> print(m_a)	#doctest: +NORMALIZE_WHITESPACE
 	[[1, 2, 3],
@@ -33,7 +57,7 @@ Multiply matrix m_a which is not a list of list:
 	>>> lazy_matrix_mul(m_a, m_b)
 	Traceback (most recent call last):
 		...
-	TypeError: m_a must be a list of lists
+	ValueError: setting an array element with a sequence.
 
 Multiply matrix m_b which is not a list of list:
 	>>> m_b = [1, 2, 3, "str", 4, 5, [6, 7]]
@@ -41,7 +65,7 @@ Multiply matrix m_b which is not a list of list:
 	>>> lazy_matrix_mul(m_a, m_b)
 	Traceback (most recent call last):
 		...
-	TypeError: m_b must be a list of lists
+	ValueError: setting an array element with a sequence
 
 Multiply matrix m_b which is an empty list:
 	>>> m_b = [[],[],[]]
@@ -49,7 +73,7 @@ Multiply matrix m_b which is an empty list:
 	>>> lazy_matrix_mul(m_a, m_b)
 	Traceback (most recent call last):
 		...
-	ValueError: m_b can't be empty
+	ValueError: shapes (3,2) and (3,0) not aligned: 2 (dim 1) != 3 (dim 0)
 
 Multiply matrix m_a which is an empty list:
 	>>> m_a = []
@@ -57,15 +81,23 @@ Multiply matrix m_a which is an empty list:
 	>>> lazy_matrix_mul(m_a, m_b)
 	Traceback (most recent call last):
 		...
-	ValueError: m_a can't be empty
+	ValueError: shapes (0,) and (3,2) not aligned: 0 (dim 0) != 3 (dim 0)
 	
+Multiply matrix m_b which is not a list of ints/floats:
+	>>> m_b = [[1, "bro", 3], ["12", 4, 5], [6, 7.95, 8]]
+	>>> m_a = [[1, 2, 9], [2, 4, 6]]
+	>>> lazy_matrix_mul(m_a, m_b)
+	Traceback (most recent call last):
+		...
+	TypeError: invalid data type for einsum
+
 Multiply matrix m_a which is not a list of ints/floats:
 	>>> m_a = [[1, 2.5, 3], ["12", 4, 5], [6, 7.95, 8]]
 	>>> m_b = [[1, 2, 9], [2, 4, 6]]
 	>>> lazy_matrix_mul(m_a, m_b)
 	Traceback (most recent call last):
 		...
-	TypeError: m_a should contain only integers or floats
+	ValueError: shapes (3,3) and (2,3) not aligned: 3 (dim 1) != 2 (dim 0)
 
 Multiply matrix m_a of unequal row size:
 	>>> m_a = [[1, 12.54, 3, 6], [], [45.67, float("inf")]]
@@ -73,7 +105,7 @@ Multiply matrix m_a of unequal row size:
 	>>> lazy_matrix_mul(m_a, m_b)
 	Traceback (most recent call last):
 		...
-	TypeError: each row of m_a must be of the same size
+	ValueError: setting an array element with a sequence.
 
 Multiply matrix m_b of unequal row size:
 	>>> m_b = [[1, 12.54, 3, 6], [53.21, 6.45, 4], [45.67, float("inf")]]
@@ -81,7 +113,7 @@ Multiply matrix m_b of unequal row size:
 	>>> lazy_matrix_mul(m_a, m_b)
 	Traceback (most recent call last):
 		...
-	TypeError: each row of m_b must be of the same size
+	ValueError: setting an array element with a sequence.
 	
 
 Multiply matrix m_b and m_a if multiplication is invalid:
@@ -90,7 +122,7 @@ Multiply matrix m_b and m_a if multiplication is invalid:
 	>>> lazy_matrix_mul(m_a, m_b)
 	Traceback (most recent call last):
 		...
-	ValueError: m_a and m_b can't be multiplied
+	ValueError: shapes (3,3) and (2,2) not aligned: 3 (dim 1) != 2 (dim 0)
 
 Multiply matrix m_b and m_a if multiplication is valid:
 	>>> m_b = [[1, 2], [3, 4]]

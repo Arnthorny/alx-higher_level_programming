@@ -9,7 +9,7 @@ This function prints a text with 2 new lines after these chars -
 """
 
 
-def text_indentation(text = None):
+def text_indentation(text=None):
     """
     This function indents a given text and prints it to stdout
 
