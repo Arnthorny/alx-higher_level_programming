@@ -25,8 +25,8 @@ void print_python_float(PyObject *p)
 }
 
 /**
- * print_python_bytes - C function to print basic about Python lists
- * @p: A Python List Object
+ * print_python_bytes - C function to print basic about Python bytes
+ * @p: A Python Byte Object
  */
 void print_python_bytes(PyObject *p)
 {

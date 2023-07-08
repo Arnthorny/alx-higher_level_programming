@@ -1,0 +1,115 @@
+The ``100-matrix_mul`` module
+==============================
+
+Using ``matrix_mul``
+---------------------
+
+This module contains the matrix_mul function
+used to multiply 2 matrices:
+
+Import the function from the module:
+	>>> matrix_mul = __import__("100-matrix_mul").matrix_mul
+
+Test that function has a docstring:
+    >>> len(matrix_mul.__doc__) > 1
+    True
+
+Multiply matrix m_b of invalid type:
+	>>> m_b = 123
+	>>> m_a = [[1,2,3], [2,4,5], [8,9,11]]
+	>>> matrix_mul(m_a, m_b)
+	Traceback (most recent call last):
+		...
+	TypeError: m_b must be a list
+
+	>>> print(m_a)	#doctest: +NORMALIZE_WHITESPACE
+	[[1, 2, 3],
+	[2, 4, 5],
+	[8, 9, 11]]
+
+Multiply matrix m_a which is not a list of list:
+	>>> m_a = [[1, 2, 3], 3, 4, 5, [6, 7]]
+	>>> m_b = [[1,2], [2,4], [9,11]]
+	>>> matrix_mul(m_a, m_b)
+	Traceback (most recent call last):
+		...
+	TypeError: m_a must be a list of lists
+
+Multiply matrix m_b which is not a list of list:
+	>>> m_b = [1, 2, 3, "str", 4, 5, [6, 7]]
+	>>> m_a = [[1,2], [2,4], [9,11]]
+	>>> matrix_mul(m_a, m_b)
+	Traceback (most recent call last):
+		...
+	TypeError: m_b must be a list of lists
+
+Multiply matrix m_b which is an empty list:
+	>>> m_b = [[],[],[]]
+	>>> m_a = [[1,2], [2,4], [9,11]]
+	>>> matrix_mul(m_a, m_b)
+	Traceback (most recent call last):
+		...
+	ValueError: m_b can't be empty
+
+Multiply matrix m_a which is an empty list:
+	>>> m_a = []
+	>>> m_b = [[1,2], [2,4], [9,11]]
+	>>> matrix_mul(m_a, m_b)
+	Traceback (most recent call last):
+		...
+	ValueError: m_a can't be empty
+	
+Multiply matrix m_a which is not a list of ints/floats:
+	>>> m_a = [[1, 2.5, 3], ["12", 4, 5], [6, 7.95, 8]]
+	>>> m_b = [[1, 2, 9], [2, 4, 6]]
+	>>> matrix_mul(m_a, m_b)
+	Traceback (most recent call last):
+		...
+	TypeError: m_a should contain only integers or floats
+
+Multiply matrix m_a of unequal row size:
+	>>> m_a = [[1, 12.54, 3, 6], [], [45.67, float("inf")]]
+	>>> m_b = [[1, 2, 9], [2, 4, 6]]
+	>>> matrix_mul(m_a, m_b)
+	Traceback (most recent call last):
+		...
+	TypeError: each row of m_a must be of the same size
+
+Multiply matrix m_b of unequal row size:
+	>>> m_b = [[1, 12.54, 3, 6], [53.21, 6.45, 4], [45.67, float("inf")]]
+	>>> m_a = [[1, 2, 9], [2, 4, 6]]
+	>>> matrix_mul(m_a, m_b)
+	Traceback (most recent call last):
+		...
+	TypeError: each row of m_b must be of the same size
+	
+
+Multiply matrix m_b and m_a if multiplication is invalid:
+	>>> m_a = [[1, 12.54, 3], [53.21, 6.45, 4], [45.67, float("inf"), 12]]
+	>>> m_b = [[1, 2], [2, 4]]
+	>>> matrix_mul(m_a, m_b)
+	Traceback (most recent call last):
+		...
+	ValueError: m_a and m_b can't be multiplied
+
+Multiply matrix m_b and m_a if multiplication is valid:
+	>>> m_b = [[1, 2], [3, 4]]
+	>>> m_a = [[1, 2], [3, 4]]
+	>>> matrix_mul(m_a, m_b)	#doctest: +NORMALIZE_WHITESPACE
+	[[7, 10],
+	[15, 22]]
+
+Multiply matrix m_b and m_a if multiplication is valid:
+	>>> m_a = [[1, 2]]
+	>>> m_b = [[3, 4], [5, 6]]
+	>>> matrix_mul(m_a, m_b)	#doctest: +NORMALIZE_WHITESPACE
+	[[13, 16]]
+
+Multiply matrix m_b and m_a if multiplication is valid:
+	>>> m_a = [[1, 2], [3.5, 4], [3, 5]]
+	>>> m_b = [[1, 2], [3, 4]]
+	>>> matrix_mul(m_a, m_b)	#doctest: +NORMALIZE_WHITESPACE
+	[[7, 10],
+	[15.5, 23.0],
+	[18, 26]]
+

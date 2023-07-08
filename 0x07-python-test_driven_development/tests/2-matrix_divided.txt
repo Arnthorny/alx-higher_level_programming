@@ -1,0 +1,103 @@
+The ``2-matrix_divided`` module
+==============================
+
+Using ``matrix_divided``
+---------------------
+
+This module contains the matrix_divided function
+used to divide all elements of a matrix:
+
+Import the function from the module:
+	>>> matrix_divided = __import__("2-matrix_divided").matrix_divided
+
+Test that function has a docstring:
+    >>> len(matrix_divided.__doc__) > 1
+    True
+
+Divide matrix of small integers:
+	>>> mat_1 = [[1, 2, 3],[4, 5, 6]]
+	>>> matrix_divided(mat_1, 3) #doctest: +NORMALIZE_WHITESPACE
+	[[0.33, 0.67, 1.0],
+	[1.33, 1.67, 2.0]]
+	>>> print(mat_1)	#doctest: +NORMALIZE_WHITESPACE
+	[[1, 2, 3],
+	[4, 5, 6]]
+
+Divide a matrix containing ints and floats:
+	>>> mat_2 = [[1, 12.54, 3], [53.21, 6.45, 7.71], [45.67, float('-inf'), 54]]
+	>>> matrix_divided(mat_2, 4) #doctest: +NORMALIZE_WHITESPACE
+	[[0.25, 3.13, 0.75],
+	[13.3, 1.61, 1.93],
+	[11.42, -inf, 13.5]]
+	>>> print(mat_2)	 #doctest: +NORMALIZE_WHITESPACE
+	[[1, 12.54, 3],
+	[53.21, 6.45, 7.71],
+	[45.67, -inf, 54]]
+
+Divide a 4x5 matrix containing ints and floats:
+	>>> mat_2 = [[23, 12.54, 3, 69, 87], [32.11, 9.53, 11.31, 78.545, 465.31], [95.323, float('-inf'), 47.341, 34, 887.6], [45.67, 6, 54, 0, 2.354]]
+	>>> matrix_divided(mat_2, 7) #doctest: +NORMALIZE_WHITESPACE
+	[[3.29, 1.79, 0.43, 9.86, 12.43],
+	[4.59, 1.36, 1.62, 11.22, 66.47],
+	[13.62, -inf, 6.76, 4.86, 126.8],
+	[6.52, 0.86, 7.71, 0.0, 0.34]]
+
+	>>> print(mat_2)	 #doctest: +NORMALIZE_WHITESPACE
+	[[23, 12.54, 3, 69, 87],
+	[32.11, 9.53, 11.31, 78.545, 465.31],
+	[95.323, -inf, 47.341, 34, 887.6],
+	[45.67, 6, 54, 0, 2.354]]
+
+Divide matrix containing non-floats and non-ints:
+	>>> mat_3 = [[1, 12.54, 3], [53.21, "6.45", 7.71], [45.67, "inf", 54]]
+	>>> matrix_divided(mat_3, 2)
+	Traceback (most recent call last):
+		...
+	TypeError: matrix must be a matrix (list of lists) of integers/floats
+
+Divide matrix containing non-floats and non-ints:
+	>>> mat_3_5 = [1, 12.54, 3] 
+	>>> matrix_divided(mat_3_5, 2)
+	Traceback (most recent call last):
+		...
+	TypeError: matrix must be a matrix (list of lists) of integers/floats
+
+Divide matrix of unequal row size:
+	>>> mat_4 = [[1, 12.54, 3, 6], [53.21, "6.45", 4], [45.67, "inf"]]
+	>>> matrix_divided(mat_4, 2)
+	Traceback (most recent call last):
+		...
+	TypeError: Each row of the matrix must have the same size
+
+Divide matrix with div, where div is not a number:
+	>>> mat_5 = [[1, 2, 3],[4, 5, 6]]
+	>>> matrix_divided(mat_5, "3.0")
+	Traceback (most recent call last):
+		...
+	TypeError: div must be a number
+	
+Divide matrix with div, where div is 0:
+	>>> mat_6 = [[1, 2, 3], [4, 5, 6]]
+	>>> matrix_divided(mat_6, 0)
+	Traceback (most recent call last):
+		...
+	ZeroDivisionError: division by zero
+
+Divide an empty matrix:
+	>>> mat_7 = [[]]
+	>>> matrix_divided(mat_7, 2)
+	[[]]
+	>>> mat_7 = [[], [], []]
+	>>> matrix_divided(mat_7, 3)
+	[[], [], []]
+
+Call function with no arguments or 1 argument:
+	>>> matrix_divided()
+	Traceback (most recent call last):
+		...
+	TypeError: Function takes exactly 2 arguments
+	
+	>>> matrix_divided([[5, 6, 7], [1, 2, 3]])
+	Traceback (most recent call last):
+		...
+	TypeError: Function takes exactly 2 arguments

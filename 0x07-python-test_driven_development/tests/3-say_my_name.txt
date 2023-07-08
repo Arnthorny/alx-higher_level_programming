@@ -1,0 +1,50 @@
+The ``3-say_my_name`` module
+==============================
+
+Using ``say_my_name``
+---------------------
+
+This module contains the say_my_name function
+that prints "My name is <first name> <last name>":
+
+Import the function from the module:
+	>>> say_my_name = __import__("3-say_my_name").say_my_name
+
+Test that function has a docstring:
+    >>> len(say_my_name.__doc__) > 1
+    True
+
+Test with normal string arguments
+	>>> say_my_name("John", "Smith")
+	My name is John Smith
+	
+	>>> say_my_name("Walter", "White")
+	My name is Walter White
+
+Test with a single argument:
+	>>> say_my_name("Bob") #doctest: +REPORT_NDIFF
+	My name is Bob 
+
+Test with invalid last_name
+	>>> say_my_name("Bruhh", 12)	
+	Traceback (most recent call last):
+		...
+	TypeError: last_name must be a string
+
+Test with invalid first_name
+	>>> say_my_name(12, "White")	
+	Traceback (most recent call last):
+		...
+	TypeError: first_name must be a string
+
+Test with no argument:
+	>>> say_my_name()
+	Traceback (most recent call last):
+		...
+	TypeError: first_name must be a string
+
+Test with list as only argument:
+	>>> say_my_name(['a', 'b', 'c', 'd', 'e'])
+	Traceback (most recent call last):
+		...
+	TypeError: first_name must be a string

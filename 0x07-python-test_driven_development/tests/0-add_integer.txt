@@ -1,0 +1,60 @@
+The ``0-add_integer`` module
+==============================
+
+Using ``add_integer``
+---------------------
+
+This module contains the add_integer function
+used to add two integrs:
+
+Import the function from the module:
+	>>> add_integer = __import__("0-add_integer").add_integer
+
+Test that function has a docstring:
+    >>> len(add_integer.__doc__) > 1
+    True
+
+Add two small integers:
+	>>> add_integer(1, 4)
+	5
+
+Add two floats:
+	>>> add_integer(1.4, 5.67)
+	6
+
+Add an integer and a float:
+	>>> add_integer(1, 67.934)
+	68
+
+Add two large integers:
+	>>> add_integer(130039023532, 33204012042103)
+	33334051065635
+
+
+Add arg b to a string:
+	>>> add_integer("ALX", 1)
+	Traceback (most recent call last):
+		...
+	TypeError: a must be an integer
+
+Add arg a to non-integer Value:
+	>>> add_integer(12.35, None)
+	Traceback (most recent call last):
+		...
+	TypeError: b must be an integer
+
+Add an integer to positive infinity:
+	>>> add_integer(float('inf'), 2)
+	Traceback (most recent call last):
+        	...
+	OverflowError: Cannot cast infinity to int
+
+Call function with only arg a:
+	>>> add_integer(2)
+	100
+
+Call function with no args:
+	>>> add_integer()
+	Traceback (most recent call last):
+		...
+	TypeError: Function requires at least one argument
