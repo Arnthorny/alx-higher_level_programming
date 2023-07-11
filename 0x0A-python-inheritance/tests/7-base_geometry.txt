@@ -1,0 +1,89 @@
+The ``7-base_geometry`` module
+==============================
+
+Using ``BaseGeometry`` class
+---------------------
+
+This module contains the BaseGeometry class
+based on 6-base_geometry:
+
+Import the class from the module:
+	>>> mod =  __import__("7-base_geometry")
+	>>> BaseGeometry = mod.BaseGeometry
+
+
+Test that module has a docstring:
+	>>> len(mod.__doc__) > 1
+	True
+
+Test that class has a docstring:
+	>>> len(BaseGeometry.__doc__) > 1
+	True
+
+Test that class methods have docstrings:
+	>>> len(BaseGeometry.area.__doc__) > 1
+	True
+	>>> len(BaseGeometry.integer_validator.__doc__) > 1
+	True
+
+Validate valid arguments:
+        >>> bg = BaseGeometry()
+	>>> bg.integer_validator("my_int", 13)
+	>>> bg.integer_validator("height", 95)
+	
+
+Validate single arguments:
+        >>> bg = BaseGeometry()
+	>>> bg.integer_validator("single")
+	Traceback (most recent call last):
+		...
+	TypeError: single must be an integer
+
+Validate Zero arguments:
+	>>> bg = BaseGeometry()
+	>>> bg.integer_validator()
+	Traceback (most recent call last):
+		...
+	TypeError: integer_validator() missing 1 required positional argument: 'name'
+
+Validate non-integer value
+	>>> bg = BaseGeometry()
+	>>> bg.integer_validator("lone", "wolf")
+	Traceback (most recent call last):
+		...
+	TypeError: lone must be an integer
+
+Validate integer value <= 0
+	>>> bg = BaseGeometry()
+	>>> bg.integer_validator("lone", -25)
+	Traceback (most recent call last):
+		...
+	ValueError: lone must be greater than 0
+
+Validate more than 2 arguments:
+	>>> bg = BaseGeometry()
+	>>> bg.integer_validator("single", 23, 45)
+	Traceback (most recent call last):
+		...
+	TypeError: integer_validator() takes from 2 to 3 positional arguments but 4 were given
+
+Test area function:
+	>>> bg = BaseGeometry()
+	>>> bg.area()
+	Traceback (most recent call last):
+		...
+	Exception: area() is not implemented
+
+Test area function with an argument:
+	>>> bg = BaseGeometry
+	>>> bg.area(25)
+	Traceback (most recent call last):
+		...
+	Exception: area() is not implemented
+
+Test area function with two arguments:
+	>>> bg = BaseGeometry
+	>>> bg.area(25, 20)
+	Traceback (most recent call last):
+		...
+	TypeError: area() takes 1 positional argument but 2 were given
