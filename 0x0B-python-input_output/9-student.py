@@ -40,6 +40,6 @@ class Student:
         elif hasattr(self, "__slots__"):
             new_dict = {x: getattr(self, x) for x
                         in self.__slots__ if hasattr(obj, x)}
-            return(new_dict)
+            return (new_dict)
         else:
             return {}
