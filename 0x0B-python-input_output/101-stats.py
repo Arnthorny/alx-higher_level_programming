@@ -12,8 +12,6 @@ def compute_prnt_metrics(all_lines):
     Args:
         all_lines(list): ALl lines read so far from stdin
     """
-    global dict_status, file_size
-
     dict_status = {'200': 0, '301': 0, '400': 0,
                    '401': 0, '403': 0, '404': 0,
                    '405': 0, '500': 0}
