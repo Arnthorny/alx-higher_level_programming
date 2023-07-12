@@ -5,12 +5,6 @@ Script that reads from stdin line by line and computes metrics
 import sys
 
 
-dict_status = {'200': 0, '301': 0, '400': 0,
-               '401': 0, '403': 0, '404': 0,
-               '405': 0, '500': 0}
-file_size = 0
-
-
 def compute_prnt_metrics(all_lines):
     """
     This function computes and prints the metrics to stdout
@@ -19,7 +13,13 @@ def compute_prnt_metrics(all_lines):
         all_lines(list): ALl lines read so far from stdin
     """
     global dict_status, file_size
+
+    dict_status = {'200': 0, '301': 0, '400': 0,
+                   '401': 0, '403': 0, '404': 0,
+                   '405': 0, '500': 0}
+    file_size = 0
     tmp_str = ""
+
     if len(all_lines) == 0:
         return
 
@@ -49,9 +49,8 @@ def main():
         try:
             for line in sys.stdin:
                 all_lines.append(line)
-                if len(all_lines) == 10:
+                if len(all_lines) and len(all_lines) % 10 == 0:
                     compute_prnt_metrics(all_lines)
-                    all_lines = []
         except KeyboardInterrupt as e:
             compute_prnt_metrics(all_lines)
             raise e
