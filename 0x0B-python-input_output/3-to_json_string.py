@@ -5,6 +5,7 @@ This module contains the to_json_string function
 Syntax:
     to_json_string(my_obj)
 """
+
 import json
 
 
@@ -19,4 +20,4 @@ def to_json_string(my_obj):
         A string containing the JSON representation
     """
 
-    return(json.dumps(my_obj))
+    return (json.dumps(my_obj))
