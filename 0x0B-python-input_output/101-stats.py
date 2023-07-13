@@ -30,7 +30,6 @@ def verify_line(line):
     if len(l_a) != 9:
         return False
 
-    stat_codes = ("200", "301", "400", "401", "403", "404", "405", "500")
     get_str = '"GET /projects/260 HTTP/1.1"'
     c_ip = l_a[0].split('.')
     if len(c_ip) != 4 and all(x.isdigit() for x in c_ip):
@@ -44,7 +43,7 @@ def verify_line(line):
 
     if f"{l_a[4]} {l_a[5]} {l_a[6]}" != get_str:
         return False
-    elif l_a[7] not in stat_codes or not l_a[8].rstrip('\n').isdigit():
+    elif not l_a[8].rstrip('\n').isdigit():
         return False
 
     return True
@@ -68,7 +67,8 @@ def compute_prnt_metrics(all_lines):
             continue
         split_line = line.split(' ')
         file_size += int(split_line[-1][0:-1])
-        dict_status[split_line[-2]] += 1
+        if split_line[-2] in dict_status.keys():
+            dict_status[split_line[-2]] += 1
 
     for key in sorted(dict_status.keys()):
         if dict_status[key]:
