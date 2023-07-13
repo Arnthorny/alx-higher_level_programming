@@ -18,7 +18,14 @@ def verify_line(line):
         True if line is valid else False
     """
 
-    l_a = line.split(" ")
+    f_dash = line.find('-')
+    if (f_dash == -1):
+        return
+    maybe_ip = line[:f_dash].split()[0]
+
+    l_a = line[f_dash + 1:].split()
+    l_a.insert(0, '-')
+    l_a.insert(0, maybe_ip)
 
     if len(l_a) != 9:
         return False
@@ -69,6 +76,7 @@ def compute_prnt_metrics(all_lines):
 
     sys.stdout.write("File size: {}\n".format(file_size))
     sys.stdout.write(tmp_str)
+    sys.stdout.flush()
 
 
 def main():
