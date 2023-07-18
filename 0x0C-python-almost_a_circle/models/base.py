@@ -4,6 +4,7 @@ This module contains the ``Base`` class
 """
 import json
 import os
+import csv
 
 
 class Base:
@@ -75,7 +76,7 @@ class Base:
 
         if os.path.exists(filename):
             if not os.path.isfile(filename):
-                raise TypeError(f"{filename} must be a regular file")
+                raise TypeError("{} must be a regular file".format(filename))
         with open(filename, "w", encoding="utf-8") as f:
             f.write(content)
 
@@ -131,14 +132,90 @@ class Base:
         """
         filename = f"{cls.__name__}.json"
 
-        if not os.path.exists(filename):
-            return []
-        elif os.path.exists(filename) and not os.path.isfile(filename):
-            raise TypeError("{filename} must be a regular file")
+        if os.path.exists(filename) and not os.path.isfile(filename):
+            raise TypeError("{} must be a regular file".format(filename))
         else:
-            with open(filename, "r", encoding="utf-8") as f:
-                json_str = f.read()
-                list_dict = cls.from_json_string(json_str)
+            try:
+                with open(filename, "r", encoding="utf-8") as f:
+                    json_str = f.read()
+                    list_dict = cls.from_json_string(json_str)
+            except (FileNotFoundError):
+                return []
 
             instances = list(map(lambda d: cls.create(**d), list_dict))
             return instances
+
+    @classmethod
+    def save_to_file_csv(cls, list_objs=None):
+        """
+        This function writes the CSV string representation
+        of a list of objects to a file.
+
+        Args:
+            list_objs(:object:`list`): List of instances
+                                       who inherit from ``Base`` -
+            example: list of ``Rectangles`` or list of ``Square``.
+
+        """
+        filename = f"{cls.__name__}.csv"
+        if os.path.exists(filename):
+            if not os.path.isfile(filename):
+                raise TypeError("{} must be a regular file".format(filename))
+
+        if filename == "Rectangle.csv":
+            fieldnames = ("id", "width", "height", "x", "y")
+        else:
+            fieldnames = ("id", "size", "x", "y")
+
+        c_list = []
+        if list_objs is None:
+            pass
+        elif type(list_objs) != list:
+            raise TypeError("list_objs must be homogeneous "
+                            "list of `Base` objects")
+        elif not all(type(o) == cls for o in list_objs):
+            raise TypeError("list_objs must be homogeneous "
+                            "list of `Base` objects")
+        else:
+            c_list = list(map(lambda obj: obj.to_dictionary(), list_objs))
+
+        with open(filename, "w", encoding="utf-8", newline='') as f:
+            csvWriter = csv.DictWriter(f, fieldnames=fieldnames)
+            csvWriter.writerows(c_list)
+
+    @classmethod
+    def load_from_file_csv(cls):
+        """
+        Function to return a list of instance from CSV File
+
+        Returns:
+            List of instances or an empty list if file is nonexistent
+        """
+        filename = f"{cls.__name__}.csv"
+        list_dict = []
+        if filename == "Rectangle.csv":
+            fieldnames = ("id", "width", "height", "x", "y")
+        else:
+            fieldnames = ("id", "size", "x", "y")
+
+        if os.path.exists(filename) and not os.path.isfile(filename):
+            raise TypeError("{filename} must be a regular file")
+        else:
+            try:
+                with open(filename, "r", encoding="utf-8", newline='') as f:
+                    csvReader = csv.reader(f)
+                    for row in csvReader:
+                        if len(row) != len(fieldnames):
+                            raise TypeError("Invalid CSV file")
+                        try:
+                            new_row = [int(x) for x in row]
+                            new_dict = {k: v for (k, v) in
+                                        zip(fieldnames, new_row)}
+                            list_dict.append(new_dict)
+                        except (ValueError, TypeError):
+                            raise TypeError("Invalid CSV file")
+            except (FileNotFoundError):
+                return []
+
+        instances = list(map(lambda d: cls.create(**d), list_dict))
+        return instances

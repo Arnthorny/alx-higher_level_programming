@@ -26,24 +26,27 @@ class TestAllRectangleDocstrings(unittest.TestCase):
         self.assertGreater(len(models.rectangle.__doc__), 1)
 
     def testClassDocstring(self):
+        self.assertTrue(hasattr(models.rectangle, "Rectangle"))
         self.assertGreater(len(Rectangle.__doc__), 1)
 
     def testAreaFnDocstring(self):
+        self.assertTrue(hasattr(self.r0, "area"))
         self.assertGreater(len(self.r0.area.__doc__), 1)
 
     def testDisplayFnDocstring(self):
-        self.assertGreater(len(self.r0.display.__doc__), 1)
-
-    def testDisplayFnDocstring(self):
+        self.assertTrue(hasattr(self.r0, "display"))
         self.assertGreater(len(self.r0.display.__doc__), 1)
 
     def testStrFnDocstring(self):
+        self.assertTrue(hasattr(self.r0, "__str__"))
         self.assertGreater(len(self.r0.__str__.__doc__), 1)
 
     def testUpdateFnDocstring(self):
+        self.assertTrue(hasattr(self.r0, "update"))
         self.assertGreater(len(self.r0.update.__doc__), 1)
 
     def testToDictionaryFnDocstring(self):
+        self.assertTrue(hasattr(self.r0, "to_dictionary"))
         self.assertGreater(len(self.r0.to_dictionary.__doc__), 1)
 
 

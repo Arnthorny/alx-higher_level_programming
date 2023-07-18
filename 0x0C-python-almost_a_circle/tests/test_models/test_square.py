@@ -26,15 +26,19 @@ class TestAllSquareDocstrings(unittest.TestCase):
         self.assertGreater(len(models.square.__doc__), 1)
 
     def testClassDocstring(self):
+        self.assertTrue(hasattr(models.square, "Square"))
         self.assertGreater(len(Square.__doc__), 1)
 
     def testStrFnDocstring(self):
+        self.assertTrue(hasattr(self.s0, "__str__"))
         self.assertGreater(len(self.s0.__str__.__doc__), 1)
 
     def testUpdateFnDocstring(self):
+        self.assertTrue(hasattr(self.s0, "update"))
         self.assertGreater(len(self.s0.update.__doc__), 1)
 
     def testToDictionaryFnDocstring(self):
+        self.assertTrue(hasattr(self.s0, "to_dictionary"))
         self.assertGreater(len(self.s0.to_dictionary.__doc__), 1)
 
 

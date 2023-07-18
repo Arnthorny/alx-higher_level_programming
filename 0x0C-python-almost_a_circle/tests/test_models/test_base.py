@@ -12,6 +12,7 @@ from models.square import Square
 from models.rectangle import Rectangle
 from unittest.mock import patch, mock_open
 import json
+import csv
 
 
 class TestAllBaseDocstrings(unittest.TestCase):
@@ -19,22 +20,36 @@ class TestAllBaseDocstrings(unittest.TestCase):
         self.assertGreater(len(models.base.__doc__), 1)
 
     def testClassDocstring(self):
+        self.assertTrue(hasattr(models.base, "Base"))
         self.assertGreater(len(Base.__doc__), 1)
 
     def testToJSONStringFnDocstring(self):
+        self.assertTrue(hasattr(Base, "to_json_string"))
         self.assertGreater(len(Base.to_json_string.__doc__), 1)
 
     def testSaveToFileFnDocstring(self):
+        self.assertTrue(hasattr(Base, "save_to_file"))
         self.assertGreater(len(Base.save_to_file.__doc__), 1)
 
     def testFromJSONStringFnDocstring(self):
+        self.assertTrue(hasattr(Base, "from_json_string"))
         self.assertGreater(len(Base.from_json_string.__doc__), 1)
 
     def testCreateFnDocstring(self):
+        self.assertTrue(hasattr(Base, "create"))
         self.assertGreater(len(Base.create.__doc__), 1)
 
     def testLoadFromFileFnDocstring(self):
+        self.assertTrue(hasattr(Base, "load_from_file"))
         self.assertGreater(len(Base.load_from_file.__doc__), 1)
+
+    def testSaveToFileCSVFnDocstring(self):
+        self.assertTrue(hasattr(Base, "save_to_file_csv"))
+        self.assertGreater(len(Base.save_to_file_csv.__doc__), 1)
+
+    def testLoadFromFileCSVFnDocstring(self):
+        self.assertTrue(hasattr(Base, "load_from_file_csv"))
+        self.assertGreater(len(Base.load_from_file_csv.__doc__), 1)
 
 
 class TestBaseClass(unittest.TestCase):
@@ -106,38 +121,26 @@ class TestToJsonStringMethod(unittest.TestCase):
         with self.assertRaises(TypeError) as e:
             json_str = Base.to_json_string([{'x': 5},
                                             {'y': 8}, "4", 5.35])
-            self.assertEqual(str(e), "list_dictionaries must be "
-                             "a list of dictionaries")
+        self.assertEqual(str(e.exception), "list_dictionaries must be "
+                         "a list of dictionaries")
 
     def test_ListInvalid2(self):
-        with self.assertRaises(TypeError):
+        with self.assertRaises(TypeError) as e:
             json_str = Base.to_json_string(2.54)
-            self.assertEqual(str(e), "list_dictionaries must be "
-                             "a list of dictionaries")
+        self.assertEqual(str(e.exception), "list_dictionaries must be "
+                         "a list of dictionaries")
 
     def test_ListInvalid3(self):
-        with self.assertRaises(TypeError):
+        with self.assertRaises(TypeError) as e:
             json_str = Base.to_json_string({'x': 12, 'y': 5, 'id': 4})
-            self.assertEqual(str(e), "list_dictionaries must be "
-                             "a list of dictionaries")
+        self.assertEqual(str(e.exception), "list_dictionaries must be "
+                         "a list of dictionaries")
 
 
 class TestSaveToJSONFile(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         Base._Base__nb_objects = 0
-        if os.path.exists("Rectangle.json"):
-            os.remove("Rectangle.json")
-        os.mknod("Rectangle.json", mode=111)
-
-        if os.path.exists("Square.json"):
-            os.remove("Square.json")
-        os.mknod("Square.json", mode=111)
-
-    @classmethod
-    def tearDownClass(cls):
-        os.remove("Rectangle.json")
-        os.remove("Square.json")
 
     def testListOfRectangleObjects(self):
         r1 = Rectangle(10, 7, 2, 8)
@@ -185,10 +188,10 @@ class TestSaveToJSONFile(unittest.TestCase):
         filecontent = json.dumps([])
 
         with patch('models.base.open', mock_open()) as mocked_file:
-            with self.assertRaises(TypeError):
+            with self.assertRaises(TypeError) as e:
                 Square.save_to_file([s1, r2, s3])
-                self.assertEqual(str(e), "list_objs objects \
-                                          must be homogeneous")
+            self.assertEqual(str(e.exception), "list_objs objects "
+                             "must be homogeneous")
 
             mocked_file.assert_not_called()
             mocked_file().write.assert_not_called()
@@ -221,10 +224,10 @@ class TestSaveToJSONFile(unittest.TestCase):
         filecontent = json.dumps([])
 
         with patch('models.base.open', mock_open()) as mocked_file:
-            with self.assertRaises(TypeError):
+            with self.assertRaises(TypeError) as e:
                 Square.save_to_file([s1.to_dictionary, 4, 5, 6])
-                self.assertEqual(str(e), "list_objs objects \
-                                          must be homogeneous")
+            self.assertEqual(str(e.exception), "list_objs objects "
+                             "must be homogeneous")
 
             mocked_file.assert_not_called()
             mocked_file().write.assert_not_called()
@@ -247,9 +250,9 @@ class TestSaveToJSONFile(unittest.TestCase):
         with patch("os.path.exists", self.fake_path_exists):
             with patch("os.path.isfile", self.fake_path_isfile):
                 with self.assertRaises(TypeError) as e:
-                    Rectangle.save_to_file(filecontent)
-                    self.assertEqual(str(e), "Rectangle.json must"
-                                     "be a regular file")
+                    Rectangle.save_to_file([r1, r2])
+                self.assertEqual(str(e.exception), "Rectangle.json must "
+                                 "be a regular file")
 
 
 class TestFromJsonStringMethod(unittest.TestCase):
@@ -303,8 +306,8 @@ class TestFromJsonStringMethod(unittest.TestCase):
         json_str = "[2, 4, 5, 7, 9]"
         with self.assertRaises(TypeError) as e:
             list_from_json = Square.from_json_string(json_str)
-            self.assertEqual(str(e), "Deserialized object \
-                             not list of dictionaries")
+        self.assertEqual(str(e.exception), "Deserialized object "
+                         "not list of dictionaries")
 
 
 class TestCreateMethod(unittest.TestCase):
@@ -391,24 +394,14 @@ class TestLoadFromJSONFile(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         Base._Base__nb_objects = 0
-        # Create temporary JSON File for use in testing
-        # permission errors
-        if os.path.exists("Rectangle.json"):
-            os.remove("Rectangle.json")
-        os.mknod("Rectangle.json", mode=111)
-
-        if os.path.exists("Square.json"):
-            os.remove("Square.json")
-        os.mknod("Square.json", mode=111)
-
-    @classmethod
-    def tearDownClass(cls):
-        os.remove("Rectangle.json")
-        os.remove("Square.json")
 
     @staticmethod
     def fake_path_exists_false(path):
         return (False)
+
+    @staticmethod
+    def fake_path_exists_true(path):
+        return (True)
 
     def testAbsentRectangleFile(self):
         with patch('os.path.exists', self.fake_path_exists_false):
@@ -420,7 +413,7 @@ class TestLoadFromJSONFile(unittest.TestCase):
             square_list = Square.load_from_file()
             self.assertEqual([], square_list)
 
-    def testEmptyRectangleListFile(self):
+    def testEmptyListOfRectFile(self):
         filecontent = json.dumps([])
         filename = "Rectangle.json"
         with patch("models.base.open",
@@ -433,7 +426,7 @@ class TestLoadFromJSONFile(unittest.TestCase):
 
             self.assertEqual(rect_list, [])
 
-    def testEmptySquareListFile(self):
+    def testEmptyListOfSquareFile(self):
         filecontent = json.dumps([])
         filename = "Square.json"
         with patch("models.base.open",
@@ -529,20 +522,351 @@ class TestLoadFromJSONFile(unittest.TestCase):
         with patch("os.path.exists", self.fake_path_exists_true):
             with patch("os.path.isfile", self.fake_path_isfile):
                 with self.assertRaises(TypeError) as e:
-                    Rectangle.save_to_file(filecontent)
-                    self.assertEqual(str(e), "Rectangle.json must \
-                                              be a regular file")
+                    Rectangle.load_from_file()
+                self.assertEqual(str(e.exception), "Rectangle.json must "
+                                 "be a regular file")
 
     def testInvalidSquareJSONFileType(self):
-        s1 = Square(8)
-        s2 = Square(4, 9, 11)
-
-        filecontent = json.dumps([s1.to_dictionary(),
-                                  s2.to_dictionary()])
 
         with patch("os.path.exists", self.fake_path_exists_true):
             with patch("os.path.isfile", self.fake_path_isfile):
                 with self.assertRaises(TypeError) as e:
-                    Rectangle.save_to_file(filecontent)
-                    self.assertEqual(str(e), "Square.json must \
-                                              be a regular file")
+                    Square.load_from_file()
+                self.assertEqual(str(e.exception), "Square.json must "
+                                 "be a regular file")
+
+
+class TestSaveToCSVFile(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        Base._Base__nb_objects = 0
+
+    def testListOfRectangleObjects(self):
+        r1 = Rectangle(10, 7, 2, 8)
+        r2 = Rectangle(2, 4)
+        r3 = Rectangle(7, 8, 9, 8)
+
+        filename = "Rectangle.csv"
+        calls = ['3,10,7,2,8\r\n',
+                 '4,2,4,0,0\r\n',
+                 '5,7,8,9,8\r\n']
+
+        with patch('models.base.open', mock_open()) as mocked_file:
+            Rectangle.save_to_file_csv([r1, r2, r3])
+
+            # assert if file was opened with write mode 'w'
+            mocked_file.assert_called_once_with(filename, 'w',
+                                                encoding="utf-8", newline='')
+
+            # assert if write(content) was called from the file opend
+            mocked_file().write.has_calls(calls)
+
+    def testListOfSquareObjects(self):
+        s1 = Square(9, 13, 6, 11)
+        s2 = Square(3, 9, 7)
+        s3 = Square(11, 15)
+
+        filename = "Square.csv"
+        calls = ['11,9,13,6\r\n',
+                 '8,3,9,7\r\n',
+                 '9,11,15,0\r\n']
+
+        with patch('models.base.open', mock_open()) as mocked_file:
+            Square.save_to_file_csv([s1, s2, s3])
+
+            mocked_file.assert_called_once_with(filename, 'w',
+                                                encoding="utf-8", newline='')
+            mocked_file().write.has_calls(calls)
+
+    def testListOfSquareAndRectangleObjects(self):
+        s1 = Square(9, 13, 6, 11)
+        r2 = Rectangle(5, 2, 8)
+        s3 = Square(2, 13)
+
+        filename = "Square.csv"
+
+        with patch('models.base.open', mock_open()) as mocked_file:
+            with self.assertRaises(TypeError) as e:
+                Square.save_to_file_csv([s1, r2, s3])
+            self.assertEqual(str(e.exception), "list_objs must be homogeneous "
+                             "list of `Base` objects")
+
+            mocked_file.assert_not_called()
+            mocked_file().write.assert_not_called()
+
+    def testEmptyListOfObjects(self):
+        filename = "Rectangle.csv"
+        filecontent = ""
+
+        with patch('models.base.open', mock_open()) as mocked_file:
+            Rectangle.save_to_file_csv([])
+
+            mocked_file.assert_called_once_with(filename, 'w',
+                                                encoding="utf-8", newline='')
+            mocked_file().write.assert_not_called()
+
+    def testNoneListOfObjects(self):
+        filename = "Square.csv"
+        filecontent = ""
+
+        with patch('models.base.open', mock_open()) as mocked_file:
+            Square.save_to_file_csv(None)
+
+            mocked_file.assert_called_once_with(filename, 'w',
+                                                encoding="utf-8", newline='')
+            mocked_file().write.assert_not_called()
+
+    def testInvalidListOfObjects(self):
+        s1 = Square(9, 13, 6, 11)
+
+        with patch('models.base.open', mock_open()) as mocked_file:
+            with self.assertRaises(TypeError) as e:
+                Square.save_to_file_csv([s1, 4, 5, 6])
+            self.assertEqual(str(e.exception), "list_objs must be homogeneous "
+                             "list of `Base` objects")
+
+            mocked_file.assert_not_called()
+            mocked_file().write.assert_not_called()
+
+    @staticmethod
+    def fake_path_exists(path):
+        return (True)
+
+    @staticmethod
+    def fake_path_isfile(path):
+        return (False)
+
+    def testInvalidFileType(self):
+        r1 = Rectangle(10, 7, 2, 8)
+        r2 = Rectangle(2, 4)
+
+        filecontent = f"{Base._Base__nb_objects},10,7,2,8\n\
+                        {Base._Base__nb_objects},2,4,0,0\n"
+
+        with patch("os.path.exists", self.fake_path_exists):
+            with patch("os.path.isfile", self.fake_path_isfile):
+                with self.assertRaises(TypeError) as e:
+                    Rectangle.save_to_file_csv([r1, r2])
+                self.assertEqual(str(e.exception), "Rectangle.csv must "
+                                 "be a regular file")
+
+    def test_ListOfDictionaryNone(self):
+        filename = "Rectangle.csv"
+        filecontent = ""
+
+        with patch('models.base.open', mock_open()) as mocked_file:
+            Rectangle.save_to_file_csv(None)
+
+            mocked_file.assert_called_once_with(filename, 'w',
+                                                encoding="utf-8", newline='')
+            mocked_file().write.assert_not_called()
+
+    def test_ListOfDictionaryEmpty(self):
+        filename = "Square.csv"
+        filecontent = ""
+
+        with patch('models.base.open', mock_open()) as mocked_file:
+            Square.save_to_file_csv()
+
+            mocked_file.assert_called_once_with(filename, 'w',
+                                                encoding="utf-8", newline='')
+            mocked_file().write.assert_not_called()
+
+    def test_ListInvalid1(self):
+        obj_list = [{'x': 5}, {'y': 8}, "4", 5.35]
+
+        with self.assertRaises(TypeError) as e:
+            Rectangle.save_to_file_csv(obj_list)
+
+        self.assertEqual(str(e.exception), "list_objs must be homogeneous "
+                         "list of `Base` objects")
+
+    def test_ListInvalid2(self):
+        obj_list = 3.87
+
+        with self.assertRaises(TypeError) as e:
+            Square.save_to_file_csv(obj_list)
+
+        self.assertEqual(str(e.exception), "list_objs must be homogeneous "
+                         "list of `Base` objects")
+
+    def test_ListInvalid3(self):
+        obj_list = {'x': 12, 'y': 5, 'id': 4}
+
+        with self.assertRaises(TypeError) as e:
+            Rectangle.save_to_file_csv(obj_list)
+
+        self.assertEqual(str(e.exception), "list_objs must be homogeneous "
+                         "list of `Base` objects")
+
+
+class TestLoadFromCSVFile(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        Base._Base__nb_objects = 0
+
+    @staticmethod
+    def fake_path_exists_false(path):
+        return (False)
+
+    def testAbsentRectangleFile(self):
+        with patch('os.path.exists', self.fake_path_exists_false):
+            rect_list = Rectangle.load_from_file_csv()
+            self.assertEqual([], rect_list)
+
+    def testAbsentSquareFile(self):
+        with patch('os.path.exists', self.fake_path_exists_false):
+            square_list = Square.load_from_file_csv()
+            self.assertEqual([], square_list)
+
+    def testEmptyRectangleListFile(self):
+        filecontent = ""
+        filename = "Rectangle.csv"
+        with patch("models.base.open",
+                   mock_open(read_data=filecontent)) as mocked_file:
+            rect_list = Rectangle.load_from_file_csv()
+
+            # assert if file was opened with read mode 'r'
+            mocked_file.assert_called_once_with(filename, 'r',
+                                                encoding="utf-8", newline='')
+
+            self.assertEqual(rect_list, [])
+
+    def testEmptySquareListFile(self):
+        filecontent = "\n"
+        filename = "Square.csv"
+        with patch("models.base.open",
+                   mock_open(read_data=filecontent)) as mocked_file:
+
+            with self.assertRaises(TypeError) as e:
+                square_list = Square.load_from_file_csv()
+            self.assertEqual(str(e.exception), "Invalid CSV file")
+
+        # assert if file was opened with read mode 'r'
+        mocked_file.assert_called_once_with(filename, 'r',
+                                            encoding="utf-8", newline='')
+
+    def testListOfRectangleInstancesFile(self):
+        r1 = Rectangle(10, 4, 8)
+        id1 = Base._Base__nb_objects
+        r2 = Rectangle(2, 4, 9)
+        id2 = Base._Base__nb_objects
+        rect_list_ip = [r.to_dictionary() for r in (r1, r2)]
+        filecontent = f"{id1},10,4,8,0\n\
+                        {id2},2,4,9,0\n"
+        filename = "Rectangle.csv"
+
+        with patch("models.base.open",
+                   mock_open(read_data=filecontent)) as mocked_file:
+            rect_list_op = Rectangle.load_from_file_csv()
+
+            # assert if file was opened with read mode 'r'
+            mocked_file.assert_called_once_with(filename, 'r',
+                                                encoding="utf-8", newline='')
+
+            self.assertEqual(list(map(lambda x: x.to_dictionary(),
+                                      rect_list_op)),
+                             rect_list_ip)
+
+    def testListOfSquareInstancesFile(self):
+        s1 = Square(10, 5, 7)
+        id1 = Base._Base__nb_objects
+        s2 = Square(2, 9)
+        id2 = Base._Base__nb_objects
+        s3 = Square(11, 25)
+        id3 = Base._Base__nb_objects
+        sqr_list_ip = [s.to_dictionary() for s in (s1, s2, s3)]
+        filecontent = f"{id1},10,5,7\n\
+                        {id2},2,9,0\n\
+                        {id3},11,25,0\n"
+
+        filename = "Square.csv"
+
+        with patch("models.base.open",
+                   mock_open(read_data=filecontent)) as mocked_file:
+            sqr_list_op = Square.load_from_file_csv()
+
+            # assert if file was opened with read mode 'r'
+            mocked_file.assert_called_once_with(filename, 'r',
+                                                encoding="utf-8", newline='')
+
+            self.assertEqual(list(map(lambda x: x.to_dictionary(),
+                                      sqr_list_op)),
+                             sqr_list_ip)
+
+    def testCorruptSquareCSVFile(self):
+        filecontent = "\n\b Invalid Square.csv file content"
+        filename = "Square.csv"
+
+        with patch("models.base.open",
+                   mock_open(read_data=filecontent)) as mocked_file:
+
+            with self.assertRaises(TypeError) as e:
+                sqr_list_op = Square.load_from_file_csv()
+            self.assertEqual(str(e.exception), "Invalid CSV file")
+
+        # assert if file was opened with read mode 'r'
+        mocked_file.assert_called_once_with(filename, 'r',
+                                            encoding="utf-8", newline='')
+
+    def testCorruptRectangleCSVFile(self):
+        filecontent = "\t\t Invalid CSV file content\n"
+        filename = "Rectangle.csv"
+
+        with patch("models.base.open",
+                   mock_open(read_data=filecontent)) as mocked_file:
+
+            with self.assertRaises(TypeError) as e:
+                rect_list_op = Rectangle.load_from_file_csv()
+            self.assertEqual(str(e.exception), "Invalid CSV file")
+        # assert if file was opened with read mode 'r'
+        mocked_file.assert_called_once_with(filename, 'r',
+                                            encoding="utf-8", newline='')
+
+    def testCorruptRectangleCSVFile2(self):
+        filecontent = "1,2,4,5,6,7\n"
+        filename = "Rectangle.csv"
+
+        with patch("models.base.open",
+                   mock_open(read_data=filecontent)) as mocked_file:
+            with self.assertRaises(TypeError) as e:
+                rect_list_op = Rectangle.load_from_file_csv()
+            self.assertEqual(str(e.exception), "Invalid CSV file")
+
+        # assert if file was opened with read mode 'r'
+        mocked_file.assert_called_once_with(filename, 'r',
+                                            encoding="utf-8", newline='')
+
+    @staticmethod
+    def fake_path_exists_true(path):
+        return (True)
+
+    @staticmethod
+    def fake_path_isfile(path):
+        return (False)
+
+    def testInvalidRectangleCSVFileType(self):
+        r1 = Rectangle(10, 4, 8)
+        r2 = Rectangle(2, 4, 9)
+        filecontent = f"{Base._Base__nb_objects},10,4,8,0\n\
+                        {Base._Base__nb_objects},2,4,9\n"
+
+        with patch("os.path.exists", self.fake_path_exists_true):
+            with patch("os.path.isfile", self.fake_path_isfile):
+                with self.assertRaises(TypeError) as e:
+                    Rectangle.save_to_file_csv(filecontent)
+                self.assertEqual(str(e.exception), "Rectangle.csv must "
+                                 "be a regular file")
+
+    def testInvalidSquareCSVFileType(self):
+        s1 = Square(10, 5, 7)
+        s3 = Square(11, 25)
+        filecontent = f"{Base._Base__nb_objects},10,5,7\n\
+                        {Base._Base__nb_objects},11,25,0\n"
+
+        with patch("os.path.exists", self.fake_path_exists_true):
+            with patch("os.path.isfile", self.fake_path_isfile):
+                with self.assertRaises(TypeError) as e:
+                    Rectangle.save_to_file_csv(filecontent)
+                self.assertEqual(str(e.exception), "Rectangle.csv must "
+                                 "be a regular file")
