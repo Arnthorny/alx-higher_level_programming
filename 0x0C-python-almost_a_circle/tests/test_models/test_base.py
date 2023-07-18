@@ -141,6 +141,13 @@ class TestSaveToJSONFile(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         Base._Base__nb_objects = 0
+        # Create temporary JSON File for use in testing
+        # permission errors
+        if os.path.exists("Rectangle.json"):
+            os.remove("Rectangle.json")
+
+        if os.path.exists("Square.json"):
+            os.remove("Square.json")
 
     def testListOfRectangleObjects(self):
         r1 = Rectangle(10, 7, 2, 8)
@@ -405,6 +412,13 @@ class TestLoadFromJSONFile(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         Base._Base__nb_objects = 0
+        # Create temporary JSON File for use in testing
+        # permission errors
+        if os.path.exists("Rectangle.json"):
+            os.remove("Rectangle.json")
+
+        if os.path.exists("Square.json"):
+            os.remove("Square.json")
 
     @staticmethod
     def fake_path_exists_false(path):
@@ -551,6 +565,13 @@ class TestSaveToCSVFile(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         Base._Base__nb_objects = 0
+        # Create temporary JSON File for use in testing
+        # permission errors
+        if os.path.exists("Rectangle.json"):
+            os.remove("Rectangle.json")
+
+        if os.path.exists("Square.json"):
+            os.remove("Square.json")
 
     def testListOfRectangleObjects(self):
         r1 = Rectangle(10, 7, 2, 8)
@@ -715,6 +736,14 @@ class TestLoadFromCSVFile(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         Base._Base__nb_objects = 0
+        # Create temporary JSON File for use in testing
+        # permission errors
+        if os.path.exists("Rectangle.json"):
+            os.remove("Rectangle.json")
+
+        if os.path.exists("Square.json"):
+            os.remove("Square.json")
+
 
     @staticmethod
     def fake_path_exists_false(path):
