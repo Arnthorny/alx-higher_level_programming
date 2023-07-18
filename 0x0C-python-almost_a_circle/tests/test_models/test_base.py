@@ -196,12 +196,23 @@ class TestSaveToJSONFile(unittest.TestCase):
             mocked_file.assert_not_called()
             mocked_file().write.assert_not_called()
 
-    def testEmptyListOfObjects(self):
+    def testEmptyListOfRectObjects(self):
         filename = "Rectangle.json"
         filecontent = json.dumps([])
 
         with patch('models.base.open', mock_open()) as mocked_file:
             Rectangle.save_to_file([])
+
+            mocked_file.assert_called_once_with(filename, 'w',
+                                                encoding="utf-8")
+            mocked_file().write.assert_called_once_with(filecontent)
+
+    def testEmptyListOfSquareObjects(self):
+        filename = "Square.json"
+        filecontent = json.dumps([])
+
+        with patch('models.base.open', mock_open()) as mocked_file:
+            Square.save_to_file([])
 
             mocked_file.assert_called_once_with(filename, 'w',
                                                 encoding="utf-8")
