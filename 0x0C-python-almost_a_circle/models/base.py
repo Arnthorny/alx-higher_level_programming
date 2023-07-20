@@ -222,6 +222,7 @@ class Base:
         instances = list(map(lambda d: cls.create(**d), list_dict))
         return instances
 
+    @staticmethod
     def draw(list_rectangles, list_squares):
         """
         This function uses the tkinter module to draw rectangles and squares
