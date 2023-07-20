@@ -429,14 +429,12 @@ class TestLoadFromJSONFile(unittest.TestCase):
         return (True)
 
     def testAbsentRectangleFile(self):
-        with patch('os.path.exists', self.fake_path_exists_false):
-            rect_list = Rectangle.load_from_file()
-            self.assertEqual([], rect_list)
+        rect_list = Rectangle.load_from_file()
+        self.assertEqual([], rect_list)
 
     def testAbsentSquareFile(self):
-        with patch('os.path.exists', self.fake_path_exists_false):
-            square_list = Square.load_from_file()
-            self.assertEqual([], square_list)
+        square_list = Square.load_from_file()
+        self.assertEqual([], square_list)
 
     def testEmptyListOfRectFile(self):
         filecontent = json.dumps([])
@@ -750,14 +748,12 @@ class TestLoadFromCSVFile(unittest.TestCase):
         return (False)
 
     def testAbsentRectangleFile(self):
-        with patch('os.path.exists', self.fake_path_exists_false):
-            rect_list = Rectangle.load_from_file_csv()
-            self.assertEqual([], rect_list)
+        rect_list = Rectangle.load_from_file_csv()
+        self.assertEqual([], rect_list)
 
     def testAbsentSquareFile(self):
-        with patch('os.path.exists', self.fake_path_exists_false):
-            square_list = Square.load_from_file_csv()
-            self.assertEqual([], square_list)
+        square_list = Square.load_from_file_csv()
+        self.assertEqual([], square_list)
 
     def testEmptyRectangleListFile(self):
         filecontent = ""

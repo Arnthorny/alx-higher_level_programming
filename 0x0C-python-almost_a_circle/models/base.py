@@ -234,16 +234,12 @@ class Base:
         if (type(list_rectangles), type(list_squares)) != (list, list):
             raise TypeError("Arguments must be list of Base objs")
 
-        def draw_shape(o_d):
+        def draw_shape(o):
             def rand_col():
                 return f"#{rr(0,256):02x}{rr(0,256):02x}{rr(0,256):02x}"
 
-            print(o_d)
-            width = o_d['size'] if 'size' in o_d else o_d['width']
-            height = o_d['size'] if 'size' in o_d else o_d['height']
-
-            canva.create_rectangle(o_d['x'], o_d['y'], o_d['x']+width,
-                                   o_d['y']+height, outline=rand_col(),
+            canva.create_rectangle(o.x, o.y, o.x+o.width,
+                                   o.y+o.height, outline=rand_col(),
                                    fill=rand_col())
 
         win = tk.Tk()
@@ -252,5 +248,5 @@ class Base:
         canva = tk.Canvas(win, height=500, width=500, bg='#ffe')
         canva.pack()
         for shape in (list_rectangles + list_squares):
-            draw_shape(shape.to_dictionary())
+            draw_shape(shape)
         win.mainloop()
