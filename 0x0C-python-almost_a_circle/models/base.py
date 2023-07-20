@@ -7,6 +7,7 @@ import os
 import csv
 import tkinter as tk
 from random import randrange as rr
+import turtle
 
 
 class Base:
@@ -238,15 +239,26 @@ class Base:
             def rand_col():
                 return f"#{rr(0,256):02x}{rr(0,256):02x}{rr(0,256):02x}"
 
-            canva.create_rectangle(o.x, o.y, o.x+o.width,
-                                   o.y+o.height, outline=rand_col(),
-                                   fill=rand_col())
+            trtl.color(rand_col())
 
-        win = tk.Tk()
-        win.title("Let's draw it")
-        win.geometry("750x600")
-        canva = tk.Canvas(win, height=500, width=500, bg='#ffe')
-        canva.pack()
+            trtl.showturtle()
+            # Pull the pen up – no drawing when moving
+            trtl.up()
+            trtl.goto(o.x, o.y)
+            # Pull the pen down – drawing when moving
+            trtl.down()
+            for i in range(2):
+                trtl.fd(o.width)
+                trtl.lt(90)
+                trtl.fd(o.height)
+                trtl.lt(90)
+            trtl.hideturtle()
+
+        trtl = turtle.Turtle()
+        trtl.screen.bgcolor('wheat')
+        trtl.pensize(3)
+        trtl.shape("turtle")
         for shape in (list_rectangles + list_squares):
             draw_shape(shape)
-        win.mainloop()
+
+        turtle.exitonclick()
