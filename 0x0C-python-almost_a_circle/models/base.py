@@ -5,6 +5,8 @@ This module contains the ``Base`` class
 import json
 import os
 import csv
+import tkinter as tk
+from random import randrange as rr
 
 
 class Base:
@@ -219,3 +221,35 @@ class Base:
 
         instances = list(map(lambda d: cls.create(**d), list_dict))
         return instances
+
+    def draw(list_rectangles, list_squares):
+        """
+        This function uses the tkinter module to draw rectangles and squares
+
+        Args:
+            list_rectangles(list): A list of Rectangle objects
+            list_squares(list): A list of Square objects
+        """
+        if (type(list_rectangles), type(list_squares)) != (list, list):
+            raise TypeError("Arguments must be list of Base objs")
+
+        def draw_shape(o_d):
+            def rand_col():
+                return f"#{rr(0,256):02x}{rr(0,256):02x}{rr(0,256):02x}"
+
+            print(o_d)
+            width = o_d['size'] if 'size' in o_d else o_d['width']
+            height = o_d['size'] if 'size' in o_d else o_d['height']
+
+            canva.create_rectangle(o_d['x'], o_d['y'], o_d['x']+width,
+                                   o_d['y']+height, outline=rand_col(),
+                                   fill=rand_col())
+
+        win = tk.Tk()
+        win.title("Let's draw it")
+        win.geometry("750x600")
+        canva = tk.Canvas(win, height=500, width=500, bg='#ffe')
+        canva.pack()
+        for shape in (list_rectangles + list_squares):
+            draw_shape(shape.to_dictionary())
+        win.mainloop()
