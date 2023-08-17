@@ -4,7 +4,7 @@
 -- First column called genre, second column called number_of_shows
 -- A genre that with no shows linked isn't displayed
 
-SELECT name, COUNT(name) AS number_of_shows
+SELECT name AS genre, COUNT(name) AS number_of_shows
    FROM ((tv_genres AS tg
 	INNER JOIN tv_show_genres AS tsg
 	ON tsg.genre_id=tg.id) 
