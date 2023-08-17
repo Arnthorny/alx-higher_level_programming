@@ -1,11 +1,16 @@
 -- List all shows.
--- A script that script that lists all comedy of the database. 
 
-SELECT title, name
-   FROM ((tv_shows AS ts 
-	LEFT JOIN tv_show_genres AS tsg 
-	ON ts.id=tsg.show_id)
+-- A script that script that lists all shows,
+-- and all genres linked to that show, from the database.
+SELECT name
+    FROM tv_genres
+   WHERE name NOT IN
+       (SELECT name 
+	  FROM ((tv_genres AS tg
+	 	INNER JOIN tv_show_genres AS tsg
+		ON tsg.genre_id=tg.id)
 
-	LEFT JOIN tv_genres as tg 
-	ON tg.id=tsg.genre_id)
-  ORDER BY title, name;
+		INNER JOIN tv_shows AS ts
+		ON ts.id = tsg.show_id)
+	  WHERE title = 'Dexter')
+   ORDER BY name;
