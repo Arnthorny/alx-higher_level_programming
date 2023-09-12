@@ -1,9 +1,8 @@
 #!/usr/bin/node
 
-const numList = Array.from(process.argv.slice(2), x => Number(x)).sort().reverse();
-
-if (numList.length < 2) {
+if (process.argv.length <= 3) {
   console.log(0);
 } else {
+  const numList = process.argv.slice(2).sort().reverse();
   console.log(numList[1]);
 }
