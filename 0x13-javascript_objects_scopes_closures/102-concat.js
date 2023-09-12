@@ -1,18 +1,9 @@
 #!/usr/bin/node
 
-const { readFile, writeFile } = require('node:fs/promises');
-const path = require('path');
-const files = process.argv.slice(2);
+const fs = require('fs');
 
-async function concat () {
-  try {
-    const data1 = await readFile(path.resolve(files[0]), { encoding: 'utf8' });
-    const data2 = await readFile(path.resolve(files[1]), { encoding: 'utf8' });
+const data1 = fs.readFileSync(process.argv[2], 'utf-8');
+const data2 = fs.readFileSync(process.argv[3], 'utf-8');
 
-    await writeFile(path.resolve(files[2]), data1, { flag: 'a' });
-    await writeFile(path.resolve(files[2]), data2, { flag: 'a' });
-  } catch (error) {
-  }
-}
-
-concat();
+fs.appendFileSync(process.argv[4], data1);
+fs.appendFileSync(process.argv[4], data2);
