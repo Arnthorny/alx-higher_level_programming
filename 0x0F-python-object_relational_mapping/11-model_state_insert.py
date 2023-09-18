@@ -13,7 +13,7 @@ if (__name__ == '__main__'):
 
     args = sys.argv[1:]
     engine = create_engine('mysql+mysqldb://{}:{}@localhost:3306/{}'
-                           .format(*args))
+                           .format(*args), echo=True)
 
     Base.metadata.create_all(engine)
 
@@ -23,4 +23,5 @@ if (__name__ == '__main__'):
     new_state = State(name="Louisiana")
     session.add(new_state)
     session.commit()
+    print(new_state.id)
     session.close()

@@ -5,7 +5,6 @@ Script to get all states from  the database hbtn_0e_0_usa
 import sys
 import MySQLdb
 
-
 if (__name__ == '__main__'):
 
     args = sys.argv[1:]
