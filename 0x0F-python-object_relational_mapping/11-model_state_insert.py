@@ -13,7 +13,7 @@ if (__name__ == '__main__'):
 
     args = sys.argv[1:]
     engine = create_engine('mysql+mysqldb://{}:{}@localhost:3306/{}'
-                           .format(*args), echo=True)
+                           .format(*args))
 
     Base.metadata.create_all(engine)
 
