@@ -22,4 +22,10 @@ if __name__ == "__main__":
     res_json = r.json()
 
     for o in res_json:
-        print('{}: {}'.format(o['sha'], o['commit']['author']['name']))
+        try:
+            print('{}: {}'.format(o.get('sha'),
+                                  o.get('commit', {})
+                                  .get('author', {})
+                                  .get('name')))
+        except AttributeError:
+            continue

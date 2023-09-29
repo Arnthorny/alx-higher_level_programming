@@ -18,4 +18,4 @@ if __name__ == "__main__":
 
     res_json = r.json()
 
-    print(res_json['id'])
+    print(res_json.get('id'))
